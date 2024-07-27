@@ -8,8 +8,8 @@ const Navigation = ({ account }) => {
       <img
         alt="logo"
         src={logo}
-        width="40"
-        height="40"
+        width="200"
+        height="200"
         className="d-inline-block align-top mx-3"
       />
       <Navbar.Brand href="#">Theta Collectibles</Navbar.Brand>

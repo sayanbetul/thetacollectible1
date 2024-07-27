@@ -8,11 +8,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 
 
+
 contract ThetaCollectibles is ERC721,ERC721Pausable, AccessControl,Ownable {
 
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     uint256 private _nextTokenId;
+    
+
 
 
     constructor(address _reflectionPoolAddress, address _birthdayBabyPoolAddress, address _houseFeeAddress) ERC721("ThetaCollectibles", "THETA") Ownable(msg.sender) {
@@ -23,6 +26,7 @@ contract ThetaCollectibles is ERC721,ERC721Pausable, AccessControl,Ownable {
         _grantRole(PAUSER_ROLE, msg.sender);
 
     }
+    
 
     // Prevent confliction
     function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, AccessControl) returns (bool) {
@@ -52,35 +56,71 @@ contract ThetaCollectibles is ERC721,ERC721Pausable, AccessControl,Ownable {
     uint8 public constant HOUSE_FEE_PERCENTAGE = 5;
 
     struct AstroData {
-        address owner;
         bytes32 url;
+        address owner;
+
+
     }
-
-
+    struct BirthDateStruct {
+        address TestUser;
+        bytes32 birthdate;
+        uint256 counter;
+         }
+     
+    mapping (bytes32 => BirthDateStruct) public birthDateStruct;
+    // Mapping from address to birthday
+    mapping(address => uint256) public userBirthdays;
+        // Mapping to check if a user has set their birthday
+    mapping(address => bool) private birthdaySet;
     // Mapping from tokenId to astrological data
     mapping(uint256 => AstroData) public astroData;
+
+
 
     // Event for minting
     event ThetaMinted(address indexed owner, uint256 indexed tokenId, AstroData);
 
-    // Pause contract actions for safety
     function pause() public onlyRole(PAUSER_ROLE) {
         _pause();
     }
 
-    // Resume contract actions
     function unpause() public onlyRole(PAUSER_ROLE) {
         _unpause();
     }
 
 
-    // Get minter role for users
     function getMinterRole() public {
         _grantRole(MINTER_ROLE, msg.sender);
     }
+    function setLastUserOfBirthdate(bytes32 birthdate) internal returns (BirthDateStruct memory) {
+        uint256 _counter = birthDateStruct[birthdate].counter;
+        _counter++;
+        birthDateStruct[birthdate] = BirthDateStruct(msg.sender, birthdate, _counter);
+        return birthDateStruct[birthdate];
 
-    // Mint NFT
-    function mintTheta(bytes32 url) external payable onlyRole(MINTER_ROLE) {
+    
+    }
+      function dropNFTToOldUser(address oldUser) internal {
+        uint256 tokenId = _nextTokenId++;
+        _mint(oldUser, tokenId);
+        astroData[tokenId] = AstroData("", oldUser);
+        emit ThetaMinted(oldUser, tokenId, AstroData("", oldUser));
+    }
+    
+    function dropNFTAndSetLastUserOfBirthdate(bytes32 birthdate) public onlyRole(MINTER_ROLE) {
+        BirthDateStruct memory currentBirthDateStruct = birthDateStruct[birthdate];
+        address oldUser = currentBirthDateStruct.TestUser;
+
+        // Drop NFT to the old user
+        if (oldUser != address(0)) {
+            dropNFTToOldUser(oldUser);
+        }
+
+        // Update with the new user
+        setLastUserOfBirthdate(birthdate);
+    }
+
+    function mintTheta(bytes32 url) public payable onlyRole(MINTER_ROLE) {
         require(msg.value >= MINT_PRICE, "Insufficient ETH sent");
 
 
@@ -98,12 +138,12 @@ contract ThetaCollectibles is ERC721,ERC721Pausable, AccessControl,Ownable {
         payable(houseFeeAddress).transfer(houseFeeAmount);
 
         // Mint the NFT
-        uint256 tokenId = _nextTokenId + 1;
+        uint256 tokenId = _nextTokenId++;
         _mint(msg.sender, tokenId);
-        astroData[tokenId] = AstroData(msg.sender, url);
+        astroData[tokenId] = AstroData(url, msg.sender);
 
         // Emit minting event
-        emit ThetaMinted(msg.sender, tokenId, AstroData(msg.sender, url));
+        emit ThetaMinted(msg.sender, tokenId, AstroData(url,msg.sender));
     }
 
 }

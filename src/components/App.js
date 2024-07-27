@@ -19,6 +19,8 @@ function App() {
   const [birthdate, setBirthdate] = useState("");
   const [status, setStatus] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [nftImage, setNftImage] = useState(null);
+  const [contract, setContract] = useState(null); // Add contract state
 
   const loadBlockchainData = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -30,6 +32,22 @@ function App() {
     setBalance(ethers.utils.formatUnits(balance, 18));
     setIsLoading(false);
   };
+  useEffect(() => {
+    // Sözleşme oluşturulduktan sonra olayı dinleyin
+    if (contract) {
+      contract.on('NFTDroppedToOldUser', (oldUser, tokenId) => {
+        console.log(`Eski kullanıcıya NFT bırakıldı: ${oldUser}, Token ID: ${tokenId}`);
+        // Bu bilgiyi ihtiyacınıza göre UI'nizde gösterin
+      });
+    }
+
+    // Clean up the event listener when the component unmounts or when contract changes
+    return () => {
+      if (contract) {
+        contract.removeAllListeners('NFTDroppedToOldUser');
+      }
+    };
+  }, [contract]);
 
 
 
@@ -72,6 +90,10 @@ function App() {
       await tx.wait();
       setStatus("Minting tamamlandı!");
       console.log("Minting tamamlandı!");
+    
+      const response = await fetch(`https://brown-impressive-ptarmigan-546.mypinata.cloud/ipfs/QmW6m9KWUe84zZkyWMrXBDfJXSyWPsfd3VEA8qLJ3gGu2J`);
+      const metadata = await response.json();
+      setNftImage(metadata.image); // Metadata'dan görsel URL'sini al
     } catch (error) {
       console.error(error);
       setStatus("Hata: " + error.message);
@@ -82,28 +104,35 @@ function App() {
     <Container>
       <Navigation account={account} />
 
-      <h1 className='my-4 text-center'>Theta Koleksiyonları</h1>
+      <h2 className='my-4 text-center'>Mintbox for Astrology timecharts living on-chain</h2>
 
       {isLoading ? (
         <Loading />
       ) : (
         <>
-          <p className='text-center'><strong>Hesabınız</strong> {balance} ETH</p>
+          <p className='text-center'><strong>Account</strong> {balance} ETH</p>
           <Form>
             <Form.Group className="mb-3" controlId="formBirthdate">
-              <Form.Label>Doğum Tarihi</Form.Label>
+              <Form.Label>Date of Birth</Form.Label>
               <Form.Control 
                 type="date" 
                 value={birthdate} 
                 onChange={(e) => setBirthdate(e.target.value)} 
-                placeholder="Doğum tarihinizi girin" 
+                placeholder="Please enter your date of birh : " 
               />
             </Form.Group>
             <Button variant="primary" onClick={handleMint}>
-              NFT Mintle
+             Mint NFT
             </Button>
           </Form>
           <p className='text-center'>{status}</p>
+          {nftImage && (
+          <div className='text-center'>
+            <h3>YOUR NFT!</h3>
+            <h4>Congratulations</h4>
+            <img src={nftImage} alt="NFT" style={{ width: '300px', height: 'auto' }} />
+          </div>
+        )}
         </>
       )}
     </Container>
