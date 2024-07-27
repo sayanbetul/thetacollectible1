@@ -20,23 +20,38 @@ What is it?
 	○	8 ruling planets 
 	○	12 astrological signs (outcomes) 
 	○	12 planet alignments (thetas) 
+
+
+ 
 ●	Theta Collectibles are NFT’s representing a person’s astrological dataset
 Art Direction
 Each square number represents a ruling planet:
 Within consists of:
 a)	A sign
 b)	A ruling house
+
+
 How it works
+
 ●	Participants input their day, time & location of birth 
 ●	Paying a mint fee, an NFT is minted onchain and sent to the minting wallet ●	NFT holders are paid a fee when
 	○	Another participant mints the same birthday  
 	○	It’s their birthday
+
+ 
 Why collect? 
+
+
 ●	Minting a Theta collectible is fun & inexpensive, costing 0.11 ETH ●	Each NFT minted costs a mint tax of 15% ●	The tax is sent to three different wallets: 
 	○	Reflection pool (5%) : buying LIDO liquidity tokens 
 	○	Birthday Baby pool (5%): every person sharing the same birthday 
 	○	House fee (5%): marketing + admin
+
+ 
 Who is the collector? 
+
+
+
 ●	Anyone who has a birthday 
 ●	Anyone who likes astrology 
 ●	Anyone who likes to make passive income on-chain in a fun way 
