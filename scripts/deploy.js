@@ -8,9 +8,9 @@ async function main() {
   const ThetaCollectibles = await hre.ethers.getContractFactory("ThetaCollectibles");
 
   // Constructor için argümanlar: reflectionPoolAddress, birthdayBabyPoolAddress, ve houseFeeAddress
-  const reflectionPoolAddress = "0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199"; // Örnek adres
-  const birthdayBabyPoolAddress = "0xdD2FD4581271e230360230F9337D5c0430Bf44C0"; // Örnek adres
-  const houseFeeAddress = "0xbDA5747bFD65F08deb54cb465eB87D40e51B197E"; // Örnek adres
+  const reflectionPoolAddress = "0x235c8627A6d9627C18652870727dE7f861f9E49F"; // Örnek adres
+  const birthdayBabyPoolAddress = "0xba33DAcf393A1054dc1eE81c977400D8868668b4"; // Örnek adres
+  const houseFeeAddress = "0x48dd7416DB852999A1B8bc749BB1cF170c9198da"; // Örnek adres
 
   // Sözleşmeyi dağıt
   const thetaCollectibles = await ThetaCollectibles.deploy(reflectionPoolAddress, birthdayBabyPoolAddress, houseFeeAddress);
