@@ -40,22 +40,22 @@ function App() {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    // Sözleşme oluşturulduktan sonra olayı dinleyin
-    if (contract) {
-      contract.on('NFTDroppedToOldUser', (oldUser, tokenId) => {
-        console.log(`Eski kullanıcıya NFT bırakıldı: ${oldUser}, Token ID: ${tokenId}`);
-        // Bu bilgiyi ihtiyacınıza göre UI'nizde gösterin
-      });
-    }
-
-    // Clean up the event listener when the component unmounts or when contract changes
-    return () => {
-      if (contract) {
-        contract.removeAllListeners('NFTDroppedToOldUser');
-      }
-    };
-  }, [contract]);
+  // useEffect(() => {
+  //   // Sözleşme oluşturulduktan sonra olayı dinleyin
+  //   if (contract) {
+  //     contract.on('NFTDroppedToOldUser', (oldUser, tokenId) => {
+  //       console.log(`Eski kullanıcıya NFT bırakıldı: ${oldUser}, Token ID: ${tokenId}`);
+  //       // Bu bilgiyi ihtiyacınıza göre UI'nizde gösterin
+  //     });
+  //   }
+  //
+  //   // Clean up the event listener when the component unmounts or when contract changes
+  //   return () => {
+  //     if (contract) {
+  //       contract.removeAllListeners('NFTDroppedToOldUser');
+  //     }
+  //   };
+  // }, [contract]);
 
   useEffect(() => {
     if (isLoading) {
