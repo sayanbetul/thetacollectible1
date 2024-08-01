@@ -20,7 +20,7 @@ function App() {
   const [status, setStatus] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [nftImage, setNftImage] = useState(null);
-  const [contract, setContract] = useState(null); // Add contract state
+  // const [contract, setContract] = useState(null); // Add contract state
 
   const loadBlockchainData = async () => {
     if (!window.ethereum) {
