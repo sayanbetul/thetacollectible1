@@ -81,7 +81,7 @@ function App() {
     try {
       const contractAddress = config.contractAddress;
       const contract = new ethers.Contract(contractAddress, TOKEN_ABI.abi, signer);
-      setContract(contract); // Save the contract instance to state
+      // setContract(contract); // Save the contract instance to state
 
       const mintPrice = ethers.utils.parseEther("0.0011");
       const stringToConvert = "https://brown-impressive-ptarmigan-546.mypinata.cloud/ipfs/QmVQMZmoffk1FMvipFZWiUD7aG9buvoGNMEUHQ5BMLejYk";
